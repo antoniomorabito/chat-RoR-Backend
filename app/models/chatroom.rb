@@ -9,6 +9,9 @@ class Chatroom
 
   before_create :generate_unique_code
 
+
+  paginates_per 10
+
   private
 
   def generate_unique_code

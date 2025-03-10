@@ -28,6 +28,8 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 gem "mongoid"
+gem "kaminari-mongoid"
+
 
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -63,3 +65,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "kaminari", "~> 1.2"

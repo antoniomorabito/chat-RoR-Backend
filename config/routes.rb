@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Chatrooms API
-  resources :chatrooms, only: [:create, :show] do
+  resources :chatrooms, only: [:index, :create, :show] do
     resources :messages, only: [:index, :create]
   end
 
