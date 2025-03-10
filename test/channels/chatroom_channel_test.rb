@@ -1,29 +1,26 @@
 require "test_helper"
 
 class ChatroomChannelTest < ActionCable::Channel::TestCase
-  setup do
-    @chatroom = Chatroom.create(name: "Test Room", unique_code: "test123")
+  def setup
+    @chatroom = Chatroom.create!(name: "Test Room", unique_code: SecureRandom.hex(10))
   end
 
-  test "subscribes to chatroom stream" do
+  test "subscribes to a valid chatroom" do
     subscribe(chatroom_id: @chatroom.unique_code)
-
-    assert subscription.confirmed? 
-    assert_has_stream "chatroom_#{@chatroom.id}" 
+    assert subscription.confirmed?
+    assert_has_stream "chatroom_#{@chatroom.id}"
   end
 
-  test "does not subscribe with invalid chatroom" do
+  test "rejects subscription with invalid chatroom" do
     subscribe(chatroom_id: "nonexistent")
-
-    assert subscription.rejected? 
+    assert_no_streams
   end
 
   test "broadcasts messages to chatroom stream" do
     subscribe(chatroom_id: @chatroom.unique_code)
 
-    message_data = { chatroom_id: @chatroom.unique_code, content: "Hello!", sender: "Alice" }
-    perform :receive, message_data
-
-    assert_broadcast_on("chatroom_#{@chatroom.id}", message_data) 
+    assert_broadcasts("chatroom_#{@chatroom.id}", 1) do
+      perform(:receive, { chatroom_id: @chatroom.unique_code, content: "Hello!", sender: "Alice" })
+    end
   end
 end
