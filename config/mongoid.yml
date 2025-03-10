@@ -287,7 +287,7 @@ development:
 test:
   clients:
     default:
-      uri: "mongodb+srv://antonio:csNtykvQOAF0EchF@cluster-chat.rxhkf.mongodb.net/chatapp_development?retryWrites=true&w=majority&appName=cluster-chat"
+      uri: mongodb+srv://antonio:CRdnjesIO4ShMMB3@cluster-chat.rxhkf.mongodb.net/chatapp_development?authSource=admin&retryWrites=true&w=majority&appName=cluster-chat
       options:
         read:
           mode: :primary
