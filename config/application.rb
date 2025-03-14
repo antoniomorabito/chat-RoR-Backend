@@ -2,26 +2,40 @@ require_relative "boot"
 
 require "rails/all"
 
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module Chatapp
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
+   
     config.load_defaults 8.0
 
-    # Please, add to the `ignore` list any other `lib` subdirectories that do
-    # not contain `.rb` files, or that should not be reloaded or eager loaded.
-    # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w[assets tasks])
+   
+    Rails.application.config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*' 
+        resource '*',
+          headers: :any,
+          methods: [:get, :post, :put, :patch, :delete, :options],
+          expose: ['Authorization'],
+          credentials: false
+      end
+    end
+    
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+   
+    config.api_only = false
+
+   
+    config.action_controller.default_protect_from_forgery = false
+
+   
+    config.middleware.use Rack::Head
+    config.middleware.use Rack::ConditionalGet
+    config.middleware.use Rack::ETag
+    config.middleware.delete ActionDispatch::HostAuthorization
+    config.action_dispatch.rescue_responses["ActionController::UnknownFormat"] = :not_acceptable
+    config.middleware.delete ActionDispatch::ContentSecurityPolicy::Middleware
+    config.middleware.delete ActionDispatch::PermissionsPolicy::Middleware
+
   end
 end

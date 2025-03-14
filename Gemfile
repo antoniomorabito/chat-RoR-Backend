@@ -30,7 +30,7 @@ gem "solid_cable"
 gem "mongoid"
 gem "kaminari-mongoid"
 
-
+gem 'rack-cors'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
